@@ -1,0 +1,35 @@
+{
+  "model": "resnet50",
+  "config": {
+    "epochs": 5,
+    "batch_size": 256,
+    "initial_lr": 0.1,
+    "total_params": 23705252,
+    "trainable_params": 23705252
+  },
+  "training_time": 261.8585059642792,
+  "epoch_losses": [
+    4.595096079614952,
+    4.273081631361215,
+    4.000993221803913,
+    3.7824471449637933,
+    3.5176396580938496
+  ],
+  "epoch_accuracies": [
+    0.0191,
+    0.046,
+    0.0805,
+    0.1198,
+    0.1628
+  ],
+  "learning_rates": [
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1
+  ],
+  "best_accuracy": 0.1628,
+  "final_accuracy": 0.1628,
+  "final_loss": 3.5176396580938496
+}

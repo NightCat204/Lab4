@@ -1,0 +1,67 @@
+task4.1：
+python resnet-cifar100.py -c config.yml --device 0
+
+task4.2：
+# Adam版本
+python resnet-cifar100-adam.py -c config_adam.yml --device 0
+# AdamW版本  
+python resnet-cifar100-adamw.py -c config_adamw.yml --device 0
+
+# 结果记录如下：
+default:
+Best Accuracy: 0.3586
+Total time: 442.64754033088684
+
+adam:
+Best Accuracy: 0.6555
+Total time: 420.57477164268494
+
+adamw:
+Best Accuracy: 0.6572
+Total time: 420.99713587760925
+
+task4.3
+# 单次实验
+python src/resnet-cifar100-lr-analysis.py --lr 0.1 --epochs 50 --device 0 --lr-schedule --output-name report/my_experiment
+# 批量实验（4组对比）
+./script/run_lr_experiments.sh
+# 自定义可视化
+python src/plot_lr_comparison.py --exp1 report/lr_0.001_fixed.json --exp2 report/lr_0.1_scheduled.json
+
+# 对比图分析:
+1. Training Loss vs. Epoch（左上）
+固定LR=0.1：损失从3.5平滑下降到0.22，但后期震荡明显
+动态LR：
+Epoch 1-30: 快速下降到0.41
+Epoch 31（LR→0.01）: 突降至0.20（明显拐点）
+Epoch 41（LR→0.001）: 继续降至0.08
+2. Test Accuracy vs. Epoch（右上）
+固定LR: 最高65.55%，后期波动大
+动态LR:
+Epoch 30前达到62%
+Epoch 31后快速提升至70%+
+最终70.83%（提升5.3%）
+3. Learning Rate Schedule（左下）
+固定LR: 水平线，始终0.1
+动态LR:
+Epoch 1-30: 0.1
+Epoch 31-40: 0.01（降10倍）
+Epoch 41-45: 0.001（再降10倍）
+完美呈现阶梯状衰减
+4. Training Loss - Log Scale（右下）
+对数坐标更清晰展示后期收敛
+动态LR在epoch 31和41的跳变非常明显
+固定LR在0.2附近震荡，无法继续下降
+
+Epoch 1-30（LR=0.1）
+
+快速收敛，loss从3.5→0.4
+两种方法基本一致
+Epoch 31-40（LR=0.01）
+
+动态LR：loss突降至0.10，准确率跃升至70%
+固定LR：继续震荡在0.2附近
+Epoch 41-45（LR=0.001）
+
+动态LR：精细调优，稳定在0.08
+固定LR：过大的LR导致无法收敛到最优
